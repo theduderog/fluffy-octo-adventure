@@ -25,13 +25,6 @@ body {
   border: 0;
 }
 
-
-/*
-* Sub nav
-*/
-ul.nav.page-header {
-  margin-bottom: 20px;
-}
 /*
  * Sidebar
  */
@@ -91,22 +84,16 @@ ul.nav.page-header {
   margin-top: 0;
 }
 
-
 /*
- * Placeholder dashboard ideas
- */
-
-.placeholders {
-  margin-bottom: 30px;
-  text-align: center;
-}
-.placeholders h4 {
-  margin-bottom: 0;
-}
-.placeholder {
+* Search Results Sub nav
+*/
+ul.nav.page-header {
   margin-bottom: 20px;
 }
-.placeholder img {
-  display: inline-block;
-  border-radius: 50%;
+
+/*
+* Search Results List
+*/
+p.title {
+  margin-bottom: 0px;
 }

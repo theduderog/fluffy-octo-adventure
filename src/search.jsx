@@ -6,13 +6,14 @@ $(function() {
 
     var SearchResultList = React.createClass({
       getInitialState: function() {
-        return {data: [1, 2, 3]};
+        return {data: [{name: "Chapter 2", url: "http://www.google.com", summary: "VARIATION UNDER NATURE"}]};
       },
       render: function() {
         var resultsNodes = this.state.data.map(function (result) {
           return (
               <div className="row">
-            <p>Search result {result}</p>
+                <p className="title"><a href={result.url}>{result.name}</a></p>
+                <p className="summary small"><em>{result.summary}</em></p>
               </div>
           );
         });
