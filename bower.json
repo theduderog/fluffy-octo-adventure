@@ -1,0 +1,22 @@
+{
+  "name": "fluffy-octo-adventure",
+  "version": "0.0.0",
+  "homepage": "https://github.com/theduderog/fluffy-octo-adventure",
+  "authors": [
+    "Roger Hoover <roger.hoover@gmail.com>"
+  ],
+  "description": "Fluffy Octo Adventure",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "elasticsearch": "~8.0.1",
+    "jquery": "~2.1.4",
+    "react": "~0.13.3"
+  }
+}
