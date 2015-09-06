@@ -25,6 +25,10 @@ body {
   border: 0;
 }
 
+input.form-control.searchbar {
+  width: 500px;
+}
+
 /*
  * Sidebar
  */

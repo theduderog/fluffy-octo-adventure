@@ -19,9 +19,6 @@ $(function() {
       };
     }();
 
-    /*
-      Expects a doQuery function that returns promises
-    */
     var SearchForm = React.createClass({
       propTypes: {
         doQuery: React.PropTypes.func.isRequired
@@ -37,7 +34,7 @@ $(function() {
       render: function() {
         return (
           <form className="navbar-form navbar-left" onSubmit={this.handleSubmit}>
-            <input type="text" className="form-control" placeholder="Search..." ref="query" />
+            <input type="text" className="form-control searchbar" placeholder="Search..." ref="query" />
           </form>
         );
       }
@@ -48,7 +45,6 @@ $(function() {
         pageSize: React.PropTypes.number
       },
       doQuery: function (queryStr) {
-        console.log("Doing query: " + queryStr);
         es.search({
           index: 'darwin-origin',
           type: 'chapter',
@@ -64,7 +60,6 @@ $(function() {
             }
           }
         }).then(function (resp) {
-          console.log(resp);
           this.setState({
             numHits: resp.hits.total,
             hits: resp.hits.hits.map(function (hit) {
@@ -76,9 +71,7 @@ $(function() {
         });
       },
       getInitialState: function() {
-        return {
-          numHits: 12,
-          hits: [{name: "Chapter 2", url: "http://www.google.com", summary: "VARIATION UNDER NATURE"}]};
+        return {numHits: 0, hits: []};
       },
       componentWillMount: function () {
         searchController.setListener(this.doQuery.bind(this));
@@ -92,14 +85,17 @@ $(function() {
               </div>
           );
         });
-        return (
-          <div className="results-list">
-            <div className="row">
-              <p>{this.state.numHits} hits</p>
+        if (this.state.numHits > 0) {
+          return (
+            <div className="results-list">
+              <div className="row">
+                <p>Showing {resultsNodes.length} of {this.state.numHits} hits</p>
+              </div>
+              {resultsNodes}
             </div>
-            {resultsNodes}
-          </div>
-        );
+          );
+        }
+        return (<p>No results</p>);
       }
     });
 
