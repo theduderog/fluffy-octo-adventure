@@ -18,6 +18,7 @@
     "elasticsearch": "~8.0.1",
     "jquery": "~2.1.4",
     "react": "~0.13.3",
-    "bootstrap": "~3.3.5"
+    "bootstrap": "~3.3.5",
+    "flux": "~2.1.1"
   }
 }

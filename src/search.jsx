@@ -1,19 +1,38 @@
 $(function() {
 
-    var client = new $.es.Client({
-      hosts: 'localhost:9200'
+    var es = new $.es.Client({
+      hosts: 'localhost:9200',
+      log: 'trace'
     });
 
+    var searchController = function() {
+      var listener;
+      return {
+        setListener: function (listenerCallback) {
+          listener = listenerCallback;
+        },
+        doQuery: function (query) {
+          if (listener) {
+            listener(query);
+          }
+        }
+      };
+    }();
+
+    /*
+      Expects a doQuery function that returns promises
+    */
     var SearchForm = React.createClass({
+      propTypes: {
+        doQuery: React.PropTypes.func.isRequired
+      },
       handleSubmit: function(e) {
         e.preventDefault();
         var query = React.findDOMNode(this.refs.query).value.trim();
         if (!query) {
           return;
         }
-        console.log(query);
-        // TODO: send request to the server
-        return;
+        this.props.doQuery(query);
       },
       render: function() {
         return (
@@ -25,10 +44,44 @@ $(function() {
     });
 
     var SearchResultList = React.createClass({
+      propTypes: {
+        pageSize: React.PropTypes.number
+      },
+      doQuery: function (queryStr) {
+        console.log("Doing query: " + queryStr);
+        es.search({
+          index: 'darwin-origin',
+          type: 'chapter',
+          body: {
+            _source: {
+              exclude: [ "text" ]
+            },
+            size: this.props.pageSize, 
+            query: {
+              query_string: {
+                 query: queryStr
+              }
+            }
+          }
+        }).then(function (resp) {
+          console.log(resp);
+          this.setState({
+            numHits: resp.hits.total,
+            hits: resp.hits.hits.map(function (hit) {
+              return {name: "Chapter " + hit._source.numeral, url: "http://www.google.com", summary: hit._source.title}
+            })
+          })
+        }.bind(this), function (err) {
+          console.trace(err.message);
+        });
+      },
       getInitialState: function() {
         return {
           numHits: 12,
           hits: [{name: "Chapter 2", url: "http://www.google.com", summary: "VARIATION UNDER NATURE"}]};
+      },
+      componentWillMount: function () {
+        searchController.setListener(this.doQuery.bind(this));
       },
       render: function() {
         var resultsNodes = this.state.hits.map(function (result) {
@@ -55,7 +108,7 @@ $(function() {
       document.getElementById('search')
     );
     React.render(
-      <SearchForm/>,
+      <SearchForm doQuery={searchController.doQuery.bind(searchController)} />,
       document.getElementById('search-form')
     )
 });
