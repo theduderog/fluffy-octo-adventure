@@ -4,6 +4,26 @@ $(function() {
       hosts: 'localhost:9200'
     });
 
+    var SearchForm = React.createClass({
+      handleSubmit: function(e) {
+        e.preventDefault();
+        var query = React.findDOMNode(this.refs.query).value.trim();
+        if (!query) {
+          return;
+        }
+        console.log(query);
+        // TODO: send request to the server
+        return;
+      },
+      render: function() {
+        return (
+          <form className="navbar-form navbar-left" onSubmit={this.handleSubmit}>
+            <input type="text" className="form-control" placeholder="Search..." ref="query" />
+          </form>
+        );
+      }
+    });
+
     var SearchResultList = React.createClass({
       getInitialState: function() {
         return {
@@ -30,9 +50,12 @@ $(function() {
       }
     });
 
-
     React.render(
       <SearchResultList pageSize={10}/>,
       document.getElementById('search')
     );
+    React.render(
+      <SearchForm/>,
+      document.getElementById('search-form')
+    )
 });
