@@ -6,10 +6,12 @@ $(function() {
 
     var SearchResultList = React.createClass({
       getInitialState: function() {
-        return {data: [{name: "Chapter 2", url: "http://www.google.com", summary: "VARIATION UNDER NATURE"}]};
+        return {
+          numHits: 12,
+          hits: [{name: "Chapter 2", url: "http://www.google.com", summary: "VARIATION UNDER NATURE"}]};
       },
       render: function() {
-        var resultsNodes = this.state.data.map(function (result) {
+        var resultsNodes = this.state.hits.map(function (result) {
           return (
               <div className="row">
                 <p className="title"><a href={result.url}>{result.name}</a></p>
@@ -19,6 +21,9 @@ $(function() {
         });
         return (
           <div className="results-list">
+            <div className="row">
+              <p>{this.state.numHits} hits</p>
+            </div>
             {resultsNodes}
           </div>
         );
@@ -27,7 +32,7 @@ $(function() {
 
 
     React.render(
-      <SearchResultList foo="bar"/>,
+      <SearchResultList pageSize={10}/>,
       document.getElementById('search')
     );
 });
